@@ -19,6 +19,6 @@ $ cargo +nightly cov -- show target/x86_64-unknown-linux-gnu/coverage/x86_64-unk
 ### update corpus
 After running any fuzzing tests, all corpus should be compacted via:
 ```sh
-$ cargo fuzz cmin fuzz_tx_consistency
+$ cargo +nightly fuzz cmin fuzz_tx_consistency
 ```
 Then commit the corpus changes for future use.
