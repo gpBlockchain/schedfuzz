@@ -1,7 +1,8 @@
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let dirs = [
         "fuzz/corpus/fuzz_tx_consistency",
-        "fuzz/corpus/fuzz_tx_consistency_only_valid_data1"
+        "fuzz/corpus/fuzz_tx_consistency_only_valid_data1",
+        "fuzz/corpus/crash"
     ];
     for dir in dirs {
         println!("{}", dir);
@@ -18,7 +19,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let r_patch = schedfuzz::patch::run(&data, 0).map_err(|e| format!("{:?}", e));
             let r_sched = schedfuzz::sched::run(&data, 0).map_err(|e| format!("{:?}", e));
-            assert_eq!(r_patch, r_sched);
+            assert_eq!(r_patch, r_sched, "file path : {}", path.display());
             match r_patch {
                 Ok(_) => {
                     success_corpus_v0 = success_corpus_v0 + 1;
@@ -30,7 +31,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let r_patch = schedfuzz::patch::run(&data, 2).map_err(|e| format!("{:?}", e));
             let r_sched = schedfuzz::sched::run(&data, 2).map_err(|e| format!("{:?}", e));
-            assert_eq!(r_patch, r_sched);
+            assert_eq!(r_patch, r_sched, "file path : {}", path.display());
             match r_patch {
                 Ok(_) => {
                     success_corpus_v1 = success_corpus_v1 + 1;
