@@ -4,11 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ckb-chain-spec-patch = { package = "ckb-chain-spec", git = "https://github.com/nervosnetwork/ckb", branch = "v0.204.0" }
-ckb-error-patch = { package = "ckb-error", git = "https://github.com/nervosnetwork/ckb", branch = "v0.204.0" }
-ckb-script-patch = { package = "ckb-script", git = "https://github.com/nervosnetwork/ckb", branch = "v0.204.0", default-features = false }
-ckb-traits-patch = { package = "ckb-traits", git = "https://github.com/nervosnetwork/ckb", branch = "v0.204.0" }
-ckb-types-patch = { package = "ckb-types", git = "https://github.com/nervosnetwork/ckb", branch = "v0.204.0" }
+ckb-chain-spec-patch = { package = "ckb-chain-spec", git = "https://github.com/nervosnetwork/ckb", branch = "develop" }
+ckb-error-patch = { package = "ckb-error", git = "https://github.com/nervosnetwork/ckb", branch = "develop" }
+ckb-script-patch = { package = "ckb-script", git = "https://github.com/nervosnetwork/ckb", branch = "develop", default-features = false }
+ckb-traits-patch = { package = "ckb-traits", git = "https://github.com/nervosnetwork/ckb", branch = "develop" }
+ckb-types-patch = { package = "ckb-types", git = "https://github.com/nervosnetwork/ckb", branch = "develop" }
 
 ckb-chain-spec-sched = { package = "ckb-chain-spec", git = "https://github.com/gpBlockchain/ckb", branch = "copilot/update-ckb-vm-to-asm-rv64im" }
 ckb-error-sched = { package = "ckb-error", git = "https://github.com/gpBlockchain/ckb", branch = "copilot/update-ckb-vm-to-asm-rv64im" }
