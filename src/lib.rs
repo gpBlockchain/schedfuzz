@@ -115,6 +115,32 @@ pub mod patch {
     }
 }
 
+/// Normalize an error string to ignore known formatting differences between
+/// CKB VM versions. For example, one version may produce `MemWriteOnExecutablePage`
+/// while another produces `MemWriteOnExecutablePage(18)`.
+pub fn normalize_error(err: String) -> String {
+    let mut result = err;
+    let patterns = ["MemWriteOnExecutablePage"];
+    for pattern in patterns {
+        loop {
+            // Find "Pattern(digits)" and replace with just "Pattern"
+            let Some(start) = result.find(pattern) else { break };
+            let after = start + pattern.len();
+            let Some(rest) = result.get(after..) else { break };
+            if !rest.starts_with('(') { break; }
+            let Some(close) = rest.find(')') else { break };
+            let inside = &rest[1..close];
+            if !inside.chars().all(|c| c.is_ascii_digit()) { break; }
+            result = format!(
+                "{}{}",
+                &result[..after],
+                &result[after + close + 1..]
+            );
+        }
+    }
+    result
+}
+
 pub mod sched {
     use ckb_chain_spec_sched::consensus::ConsensusBuilder;
     use ckb_error_sched::Error;
