@@ -46,12 +46,12 @@ pub mod patch {
 
     fn mock_transaction_info() -> TransactionInfo {
         TransactionInfoBuilder::default()
-            .block_number(1u64.pack())
-            .block_epoch(0u64.pack())
+            .block_number(1u64)
+            .block_epoch(0u64)
             .key(
                 TransactionKeyBuilder::default()
                     .block_hash(Byte32::zero())
-                    .index(1u32.pack())
+                    .index(1u32)
                     .build(),
             )
             .build()
@@ -65,7 +65,7 @@ pub mod patch {
 
         let data: Bytes = (Vec::from(data)).into();
         let script = Script::new_builder()
-            .hash_type(ScriptHashType::try_from(version).unwrap().into())
+            .hash_type(ScriptHashType::try_from(version).unwrap())
             .code_hash(CellOutput::calc_data_hash(&data))
             .build();
         let dep_cell = CellMetaBuilder::from_cell_output(
@@ -104,7 +104,7 @@ pub mod patch {
             .hardfork_switch(hardfork_switch)
             .build();
         let tx_verify_env =
-            TxVerifyEnv::new_submit(&HeaderView::new_advanced_builder().epoch(0.pack()).build());
+            TxVerifyEnv::new_submit(&HeaderView::new_advanced_builder().epoch(0u64).build());
         let verifier = TransactionScriptsVerifier::new(
             rtx.into(),
             provider,
@@ -113,6 +113,32 @@ pub mod patch {
         );
         verifier.verify(10_000_000)
     }
+}
+
+/// Normalize an error string to ignore known formatting differences between
+/// CKB VM versions. For example, one version may produce `MemWriteOnExecutablePage`
+/// while another produces `MemWriteOnExecutablePage(18)`.
+pub fn normalize_error(err: String) -> String {
+    let mut result = err;
+    let patterns = ["MemWriteOnExecutablePage"];
+    for pattern in patterns {
+        loop {
+            // Find "Pattern(digits)" and replace with just "Pattern"
+            let Some(start) = result.find(pattern) else { break };
+            let after = start + pattern.len();
+            let Some(rest) = result.get(after..) else { break };
+            if !rest.starts_with('(') { break; }
+            let Some(close) = rest.find(')') else { break };
+            let inside = &rest[1..close];
+            if !inside.chars().all(|c| c.is_ascii_digit()) { break; }
+            result = format!(
+                "{}{}",
+                &result[..after],
+                &result[after + close + 1..]
+            );
+        }
+    }
+    result
 }
 
 pub mod sched {
@@ -163,12 +189,12 @@ pub mod sched {
 
     fn mock_transaction_info() -> TransactionInfo {
         TransactionInfoBuilder::default()
-            .block_number(1u64.pack())
-            .block_epoch(0u64.pack())
+            .block_number(1u64)
+            .block_epoch(0u64)
             .key(
                 TransactionKeyBuilder::default()
                     .block_hash(Byte32::zero())
-                    .index(1u32.pack())
+                    .index(1u32)
                     .build(),
             )
             .build()
@@ -182,7 +208,7 @@ pub mod sched {
 
         let data: Bytes = (Vec::from(data)).into();
         let script = Script::new_builder()
-            .hash_type(ScriptHashType::try_from(version).unwrap().into())
+            .hash_type(ScriptHashType::try_from(version).unwrap())
             .code_hash(CellOutput::calc_data_hash(&data))
             .build();
         let dep_cell = CellMetaBuilder::from_cell_output(
@@ -221,7 +247,7 @@ pub mod sched {
             .hardfork_switch(hardfork_switch)
             .build();
         let tx_verify_env =
-            TxVerifyEnv::new_submit(&HeaderView::new_advanced_builder().epoch(0.pack()).build());
+            TxVerifyEnv::new_submit(&HeaderView::new_advanced_builder().epoch(0u64).build());
         let verifier = TransactionScriptsVerifier::new(
             rtx.into(),
             provider,

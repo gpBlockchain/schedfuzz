@@ -17,8 +17,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             // println!("{}", path.display());
             let data = std::fs::read(path.clone())?;
 
-            let r_patch = schedfuzz::patch::run(&data, 0).map_err(|e| format!("{:?}", e));
-            let r_sched = schedfuzz::sched::run(&data, 0).map_err(|e| format!("{:?}", e));
+            let r_patch = schedfuzz::patch::run(&data, 0).map_err(|e| schedfuzz::normalize_error(format!("{:?}", e)));
+            let r_sched = schedfuzz::sched::run(&data, 0).map_err(|e| schedfuzz::normalize_error(format!("{:?}", e)));
             assert_eq!(r_patch, r_sched, "file path : {}", path.display());
             match r_patch {
                 Ok(_) => {
@@ -29,8 +29,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
 
-            let r_patch = schedfuzz::patch::run(&data, 2).map_err(|e| format!("{:?}", e));
-            let r_sched = schedfuzz::sched::run(&data, 2).map_err(|e| format!("{:?}", e));
+            let r_patch = schedfuzz::patch::run(&data, 2).map_err(|e| schedfuzz::normalize_error(format!("{:?}", e)));
+            let r_sched = schedfuzz::sched::run(&data, 2).map_err(|e| schedfuzz::normalize_error(format!("{:?}", e)));
             assert_eq!(r_patch, r_sched, "file path : {}", path.display());
             match r_patch {
                 Ok(_) => {
