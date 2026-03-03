@@ -46,12 +46,12 @@ pub mod patch {
 
     fn mock_transaction_info() -> TransactionInfo {
         TransactionInfoBuilder::default()
-            .block_number(1u64.pack())
-            .block_epoch(0u64.pack())
+            .block_number(1u64)
+            .block_epoch(0u64)
             .key(
                 TransactionKeyBuilder::default()
                     .block_hash(Byte32::zero())
-                    .index(1u32.pack())
+                    .index(1u32)
                     .build(),
             )
             .build()
@@ -65,7 +65,7 @@ pub mod patch {
 
         let data: Bytes = (Vec::from(data)).into();
         let script = Script::new_builder()
-            .hash_type(ScriptHashType::try_from(version).unwrap().into())
+            .hash_type(ScriptHashType::try_from(version).unwrap())
             .code_hash(CellOutput::calc_data_hash(&data))
             .build();
         let dep_cell = CellMetaBuilder::from_cell_output(
@@ -104,7 +104,7 @@ pub mod patch {
             .hardfork_switch(hardfork_switch)
             .build();
         let tx_verify_env =
-            TxVerifyEnv::new_submit(&HeaderView::new_advanced_builder().epoch(0.pack()).build());
+            TxVerifyEnv::new_submit(&HeaderView::new_advanced_builder().epoch(0u64).build());
         let verifier = TransactionScriptsVerifier::new(
             rtx.into(),
             provider,
@@ -163,12 +163,12 @@ pub mod sched {
 
     fn mock_transaction_info() -> TransactionInfo {
         TransactionInfoBuilder::default()
-            .block_number(1u64.pack())
-            .block_epoch(0u64.pack())
+            .block_number(1u64)
+            .block_epoch(0u64)
             .key(
                 TransactionKeyBuilder::default()
                     .block_hash(Byte32::zero())
-                    .index(1u32.pack())
+                    .index(1u32)
                     .build(),
             )
             .build()
@@ -182,7 +182,7 @@ pub mod sched {
 
         let data: Bytes = (Vec::from(data)).into();
         let script = Script::new_builder()
-            .hash_type(ScriptHashType::try_from(version).unwrap().into())
+            .hash_type(ScriptHashType::try_from(version).unwrap())
             .code_hash(CellOutput::calc_data_hash(&data))
             .build();
         let dep_cell = CellMetaBuilder::from_cell_output(
@@ -221,7 +221,7 @@ pub mod sched {
             .hardfork_switch(hardfork_switch)
             .build();
         let tx_verify_env =
-            TxVerifyEnv::new_submit(&HeaderView::new_advanced_builder().epoch(0.pack()).build());
+            TxVerifyEnv::new_submit(&HeaderView::new_advanced_builder().epoch(0u64).build());
         let verifier = TransactionScriptsVerifier::new(
             rtx.into(),
             provider,
