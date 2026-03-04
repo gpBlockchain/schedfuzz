@@ -116,12 +116,17 @@ pub mod patch {
 }
 
 /// Normalize an error string to ignore known formatting differences between
-/// CKB VM versions. For example, one version may produce `MemWriteOnExecutablePage`
-/// while another produces `MemWriteOnExecutablePage(18)`, or `MemOutOfBound`
-/// while another produces `MemOutOfBound(4194364, Memory)`.
+/// CKB VM versions. For example, one version may produce `MemOutOfBound`
+/// while another produces `MemOutOfBound(4194364, Memory)`, or
+/// `ElfSegmentWritableAndExecutable` vs `ElfSegmentWritableAndExecutable(192065266778112)`.
 pub fn normalize_error(err: String) -> String {
     let mut result = err;
-    let patterns = ["MemWriteOnExecutablePage", "MemOutOfBound"];
+    let patterns = [
+        "MemWriteOnExecutablePage",
+        "MemOutOfBound",
+        "ElfSegmentWritableAndExecutable",
+        "ElfSegmentAddrOrSizeError",
+    ];
     for pattern in patterns {
         loop {
             // Find "Pattern(...)" and replace with just "Pattern"
