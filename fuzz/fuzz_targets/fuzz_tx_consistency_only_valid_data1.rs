@@ -5,8 +5,8 @@ use schedfuzz::{patch, sched};
 
 fuzz_target!(|data: &[u8]| -> Corpus {
     // Fuzzed code goes here
-    let r_patch = patch::run(data, 2).map_err(|e| format!("{:?}", e));
-    let r_sched = sched::run(data, 2).map_err(|e| format!("{:?}", e));
+    let r_patch = patch::run(data, 2).map_err(|e| schedfuzz::normalize_error(format!("{:?}", e)));
+    let r_sched = sched::run(data, 2).map_err(|e| schedfuzz::normalize_error(format!("{:?}", e)));
     assert_eq!(r_patch, r_sched);
     match r_patch {
             Ok(_) => {
